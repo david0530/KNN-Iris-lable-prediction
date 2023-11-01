@@ -9,7 +9,9 @@ import java.util.Collections;
 import java.util.List;
 
 public class NaiveBayesMain {
+	
     public static void main(String[] args) {
+    	
         NaiveBayesM model = new NaiveBayesM();
         List<Iris> data = new ArrayList<>();
         String filePath = "C://Users//djyan//Downloads//iris//iris.data";
@@ -23,6 +25,7 @@ public class NaiveBayesMain {
             System.out.println(e.getMessage());
         }
         Collections.shuffle(data); 
+        //shuffleLabels(data);
 
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter number of folds (N): ");
@@ -39,6 +42,18 @@ public class NaiveBayesMain {
             System.out.println("Accuracy: " + accuracy);
         }
         System.out.println("Average Accuracy: " + averageAccuracy);
+    }
+    private static void shuffleLabels(List<Iris> data) {
+        List<String> labels = new ArrayList<>();
+        for (Iris iris : data) {
+            labels.add(iris.getLabel());
+        }
+        
+        Collections.shuffle(labels);
+        
+        for (int i = 0; i < data.size(); i++) {
+            data.get(i).setLabel(labels.get(i));
+        }
     }
     
     public static List<Double> naiveBayesNFold(List<Iris> data, int N, NaiveBayesM model) { 
