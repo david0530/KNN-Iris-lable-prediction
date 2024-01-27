@@ -1,4 +1,4 @@
-package knnPack;
+package naiveBayes;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,13 +41,20 @@ public class KNNModel {
     public static void main(String[] args) {
         KNNModel model = new KNNModel();
         List<Iris> data = new ArrayList<>();
-        
-        String filePath = "C://Users//djyan//Downloads//iris//iris.data";
+
+        String filePath = "C://Users//David//Downloads//Dry_Bean_Dataset.csv";
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                	data.add(new Iris(line));
-                
+            boolean isFirstLine = true;
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false; 
+                    continue;
+                }
+                if (!line.isEmpty()) {
+                    data.add(new Iris(line));
+                }
             }
         } catch (IOException e) {
             System.out.println("error reading the file: " + e.getMessage());
@@ -58,10 +65,9 @@ public class KNNModel {
         int N = scanner.nextInt();
         System.out.println("enter number of nearest neighbors (k): ");
         int k = scanner.nextInt();
-        
-        
-        for(Double accuracy: model.KNN(data, N, k)) {
-        	System.out.println("\n" +accuracy);
+
+        for (Double accuracy : model.KNN(data, N, k)) {
+            System.out.println("\n" + accuracy);
         }
     }
 }

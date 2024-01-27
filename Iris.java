@@ -5,12 +5,16 @@ public class Iris {
     private String label;
 
     public Iris(String dataLine) {
-        String[] element = dataLine.split(",");
-        this.features = new double[4];
-        for (int i = 0; i < 4; i++) {
-            this.features[i] = Double.parseDouble(element[i])+0.1;
+        String[] elements = dataLine.split(",");
+
+        this.features = new double[16];
+        for (int i = 0; i < 16; i++) {
+            // Remove quotes and trim
+            String feature = elements[i].replace("\"", "").trim();
+            this.features[i] = Double.parseDouble(feature);
         }
-        this.label = element[4];
+        // Remove quotes from label and trim
+        this.label = elements[16].replace("\"", "").trim();
     }
 
     public double[] getFeatures() {
@@ -20,6 +24,7 @@ public class Iris {
     public String getLabel() {
         return label;
     }
+
     public void setLabel(String label) {
         this.label = label;
     }

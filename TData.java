@@ -1,4 +1,4 @@
-package knnPack;
+package naiveBayes;
 
 import java.util.*;
 

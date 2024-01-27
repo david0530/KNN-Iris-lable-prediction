@@ -1,4 +1,4 @@
-package knnPack;
+package naiveBayes;
 import java.util.*;
 
 public class Fold {
@@ -21,10 +21,10 @@ public class Fold {
             for (int j = 0; j < data.size(); j++) {
                 if (j / foldSize == i) {
                     pdata.att.add(data.get(j));
-                    pdata.originalLabel.add(data.get(j).label);
+                    pdata.originalLabel.add(data.get(j).getLabel()); // Using getter method
                 } else {
                     tdata.att.add(data.get(j));
-                    tdata.label.add(data.get(j).label);
+                    tdata.label.add(data.get(j).getLabel()); // Using getter method
                 }
             }
 
@@ -34,4 +34,3 @@ public class Fold {
         return folds;
     }
 }
-

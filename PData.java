@@ -1,7 +1,6 @@
-package knnPack;
+package naiveBayes;
 
 import java.util.*;
-
 
 public class PData {
     List<Iris> att = new ArrayList<>();
@@ -10,8 +9,11 @@ public class PData {
 
     private static double getDistance(Iris predAtt, Iris trainAtt) {
         double distance = 0;
-        for (int i = 0; i < predAtt.attributes.length; i++) {
-            distance += Math.pow(predAtt.attributes[i] - trainAtt.attributes[i], 2);
+        double[] predFeatures = predAtt.getFeatures();
+        double[] trainFeatures = trainAtt.getFeatures();
+
+        for (int i = 0; i < predFeatures.length; i++) {
+            distance += Math.pow(predFeatures[i] - trainFeatures[i], 2);
         }
         return Math.sqrt(distance);
     }
@@ -19,7 +21,7 @@ public class PData {
     public static String predictLabel(Iris predAttributes, TData trainingData, int k) {
         List<Iris> neighbors = new ArrayList<>();
         List<Double> distances = new ArrayList<>();
-        
+
         for (Iris trainData : trainingData.att) {
             double distance = getDistance(predAttributes, trainData);
             distances.add(distance);
@@ -28,23 +30,18 @@ public class PData {
         for (int i = 0; i < k; i++) {
             int minIndex = distances.indexOf(Collections.min(distances));
             neighbors.add(trainingData.att.get(minIndex));
-            Double maxNumber= (double) 1000000000;
-            distances.set(minIndex, maxNumber);
+            distances.set(minIndex, Double.MAX_VALUE);
         }
 
-        List<String> predLables = new ArrayList<>();
-        for (Iris neighbor : neighbors) {
-        	predLables.add(neighbor.label);
-        }
-        
         Map<String, Integer> labelFrequencies = new HashMap<>();
-        for (String label : predLables) {
+        for (Iris neighbor : neighbors) {
+            String label = neighbor.getLabel();
             labelFrequencies.put(label, labelFrequencies.getOrDefault(label, 0) + 1);
         }
-        
+
         String mostFrequentLabel = null;
         int maxCount = 0;
-        
+
         for (Map.Entry<String, Integer> entry : labelFrequencies.entrySet()) {
             if (entry.getValue() > maxCount) {
                 mostFrequentLabel = entry.getKey();
@@ -53,6 +50,5 @@ public class PData {
         }
 
         return mostFrequentLabel;
-
     }
 }

@@ -9,17 +9,24 @@ import java.util.Collections;
 import java.util.List;
 
 public class NaiveBayesMain {
-	
+    
     public static void main(String[] args) {
-    	
+        
         NaiveBayesM model = new NaiveBayesM();
         List<Iris> data = new ArrayList<>();
-        String filePath = "C://Users//djyan//Downloads//iris//iris.data";
+        String filePath = "C://Users//David//Downloads//Dry_Bean_Dataset.csv";
         
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
             String line;
-            while ((line = reader.readLine()) != null && !line.isEmpty()) {
-                data.add(new Iris(line));
+            boolean firstLine = true;
+            while ((line = reader.readLine()) != null) {
+                if (firstLine) {
+                    firstLine = false; 
+                    continue;
+                }
+                if (!line.isEmpty()) {
+                    data.add(new Iris(line));
+                }
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());

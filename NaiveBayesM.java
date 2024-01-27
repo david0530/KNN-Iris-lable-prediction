@@ -16,13 +16,13 @@ public class NaiveBayesM {
     }
 
     public void train(List<Iris> trainingData) {
-        for (int i = 0; i < 4; i++) {
-        	row.add(new Probability());
+        for (int i = 0; i < 15; i++) {
+            row.add(new Probability());
         }
 
-        // Calculate min and max for each vale
-        double[][] minMax = new double[4][2]; // min and max for each vale
-        for (int i = 0; i < 4; i++) {
+        // Calculate min and max for each value
+        double[][] minMax = new double[15][2]; // min and max for each value
+        for (int i = 0; i < 15; i++) {
             int featureIndex = i; 
 
             double min = Double.MAX_VALUE;
@@ -42,9 +42,9 @@ public class NaiveBayesM {
         }
 
         // Calculate intervals
-        for (int i = 0; i < 4; i++) {
-            double range = (minMax[i][1] - minMax[i][0])/3;
-            for (int j = 0; j < 3; j++) { // 3 intervals
+        for (int i = 0; i < 15; i++) {
+            double range = (minMax[i][1] - minMax[i][0]) / 40; // Dividing into 40 intervals
+            for (int j = 0; j < 40; j++) { // 20 intervals
                 double start = minMax[i][0] + j * range;
                 double end = minMax[i][0] + (j + 1) * range;
                 row.get(i).addInterval(new AttInfo(start, end));
@@ -53,7 +53,7 @@ public class NaiveBayesM {
 
         for (Iris iris : trainingData) {
             totalLabelCounts.put(iris.getLabel(), totalLabelCounts.getOrDefault(iris.getLabel(), 0) + 1);
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 15; i++) {
                 AttInfo interval = row.get(i).getIntervalForValue(iris.getFeatures()[i]);
                 if (interval != null) {
                     interval.addLabel(iris.getLabel());
@@ -68,7 +68,7 @@ public class NaiveBayesM {
         Map<String, Double> labelProbabilities = new HashMap<>();
         for (String label : totalLabelCounts.keySet()) {
             double probability = (double) totalLabelCounts.get(label) / totalRow; // P(label)
-            for (int i = 0; i < 4; i++) { // For each column
+            for (int i = 0; i < 15; i++) { // For each column
                 AttInfo interval = row.get(i).getIntervalForValue(iris.getFeatures()[i]); 
                 if (interval != null && interval.labelCounts.containsKey(label)) {
                     // P(feature|label) 
